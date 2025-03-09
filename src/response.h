@@ -3,8 +3,8 @@
 
 #include "util/util.h"
 
-char *checkFile(char *);
-char *infoResponse(char *); // returns file name or NULL
-char *formatHeader(void); //TODO
+//static int checkFile(const char *);
+void infoResponse(char *, char *); // returns file name or NULL
+void formatHeader(char *, char *); //TODO
 
 #endif

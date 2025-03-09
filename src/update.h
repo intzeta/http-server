@@ -3,9 +3,10 @@
 
 #include "util/util.h"
 
-#define PATH ../res/
+#define PATH "../res"
 
-//void dirwalk(char *dir, void (*fcn)(char *));
-//void fname(char *name);
+//static void dirwalk(char *dir, void (*fcn)(char *));
+//static void fname(char *name);
+void updateDir(char *name);
 
 #endif

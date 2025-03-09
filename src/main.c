@@ -19,7 +19,5 @@ int main(int argc, char *argv[]){
   }
 
   loopServer(sockfd);
-
-
   return 0;
 }
