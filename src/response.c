@@ -1,11 +1,11 @@
 #include "response.h"
 
 
-
 /* Current bug: corrupted memory!111*/
 
 static int checkFile(const char *name){
   FILE *fp;
+  if(strlen(name) == 0) return -1;
 
   if((fp = fopen("util/fileList", "r")) == NULL){
     fprintf(stderr, "Couldn't open the list of files!\n");
@@ -35,16 +35,13 @@ static int checkFile(const char *name){
 /* Gets the subwebsite address from GET request */
 /* idk if it's even called that but ok          */
 
-void infoResponse(char *name, char *dest){
-  sscanf(name, "%*[^/]/%[^ ]", dest);
-}
-
 void formatHeader(char *name, char *dest){
   int fileSize;
 
   if((fileSize = checkFile(name)) == -1){
     fprintf(stderr, "File not found!\n");
-    return;
+    strcpy(name, "notfound.html");
+    fileSize = checkFile(name);
   }
 
   char type[128];

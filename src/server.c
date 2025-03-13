@@ -109,6 +109,8 @@ void loopServer(int sockfd){
 
       sprintf(fileName, "../res/%s", nameOfFile);
 
+      printf("%s, %s\n", nameOfFile, fileName);
+
       if(send(newSock, message, strlen(message), 0) == -1){
         fprintf(stderr, "error sending headers\n!");
       }
