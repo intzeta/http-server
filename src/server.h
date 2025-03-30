@@ -7,5 +7,6 @@
 
 int setupServer(const char *port);
 void loopServer(int sockfd);
+void newClient(int sockfd, char *userAddr);
 
 #endif

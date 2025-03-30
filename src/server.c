@@ -2,9 +2,9 @@
 #include "response.h"
 
 static void *convertStorage(struct sockaddr_storage *sast){
-  if(sast->ss_family == AF_INET){
+  if(sast->ss_family == AF_INET)
     return &(((struct sockaddr_in *)sast)->sin_addr);
-  }
+
   return &(((struct sockaddr_in6 *)sast)->sin6_addr);
 }
 
@@ -77,11 +77,8 @@ endSetup:
 void loopServer(int sockfd){
   struct sockaddr_storage newAddr;
   socklen_t newAddrlen = sizeof(newAddr);
+
   char userAddr[INET6_ADDRSTRLEN];
-  char request[BUFSIZE];
-  char message[BUFSIZE];
-  char nameOfFile[BUFSIZE];
-  char fileName[BUFSIZE];
   int newSock, status, n;
 
   while(1){
@@ -94,39 +91,41 @@ void loopServer(int sockfd){
 
     if(!fork()){
       close(sockfd);
-
-      if((status = recv(newSock, request, BUFSIZE, 0)) > 0){
-        //printf("Message sent by %s: \n\a", userAddr);
-      }else if(status == 0){
-        printf("%s has connected!\nClient disconnected!\n", userAddr);
-      }else{
-        fprintf(stderr, "Error receiving packets, Errno: %s\n", strerror(errno));
-      }
-
-      infoResponse(request, nameOfFile);
-      //printf("GET /%s HTTP/1.1\n", nameOfFile);
-      formatHeader(nameOfFile, message);
-
-      sprintf(fileName, "../res/%s", nameOfFile);
-
-      printf("%s, %s\n", nameOfFile, fileName);
-
-      if(send(newSock, message, strlen(message), 0) == -1){
-        fprintf(stderr, "error sending headers\n!");
-      }
-
-      memset(request, 0, BUFSIZE); // reuse the buffer to receive message
-
-      FILE *fp = fopen(fileName, "r");
-      while((n = fread(request, 1, 8192, fp)) > 0){
-        send(newSock, request, n, 0);
-      }
-
-      fclose(fp);
-
-      close(newSock);
-      exit(0);
+      newClient(newSock, userAddr);
     }
     close(newSock);
   }
+}
+
+void newClient(int sockfd, char *userAddr){
+  int status;
+  char request[BUFSIZE] = {'\0'};
+  char fileName[BUFSIZE] = {'\0'};
+  char message[BUFSIZE] = {'\0'};
+
+  if((status = recv(sockfd, request, BUFSIZE, 0)) > 0)
+    printf("Message sent by %s: \n\a", userAddr);
+  else if(status == 0)
+    printf("%s has connected!\nClient disconnected!\n", userAddr);
+  else
+    fprintf(stderr, "Error receiving packets, Errno: %s\n", strerror(errno));
+
+  getFileRequest(request, fileName);
+  formatHeader(fileName, message);
+
+  if(send(sockfd, message, strlen(message), 0) == -1)
+    fprintf(stderr, "error sending headers\n!");
+
+  memset(request, 0, BUFSIZE); // reuse the buffer to receive message
+
+  FILE *fp = fopen(fileName, "r");
+  int n;
+
+  while((n = fread(request, 1, 8192, fp)) > 0)
+    send(sockfd, request, n, 0);
+
+  fclose(fp);
+
+  close(sockfd);
+  exit(0);
 }

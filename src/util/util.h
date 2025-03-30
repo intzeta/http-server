@@ -17,8 +17,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#define max(a, b) (__typeof__ (a) _a = (a), _b = (b); _a > _b ? _a : _b)
-#define min(a, b) (__typeof__ (a) _a = (a), _b = (b); _a < _b ? _a : _b)
+#define max(a, b) ({__typeof__ (a) _a = (a), _b = (b); _a > _b ? _a : _b;})
+#define min(a, b) ({__typeof__ (a) _a = (a), _b = (b); _a < _b ? _a : _b;})
 
 #define BUFSIZE 512
 #define BACKLOG 10
