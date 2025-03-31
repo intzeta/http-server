@@ -7,7 +7,7 @@ static int checkFile(char *name){
   FILE *fp;
   if(strlen(name) == 0) return -1;
 
-  if((fp = fopen("util/fileList", "r")) == NULL){
+  if((fp = fopen("src/util/fileList", "r")) == NULL){
     fprintf(stderr, "Couldn't open the list of files!\n");
     return -1;
   }
@@ -21,14 +21,9 @@ static int checkFile(char *name){
     while(isspace(*p)) p++;
 
     sscanf(p, "%d %s\n", &len, fileName);
-    printf("%s\n", p);
-    printf("%s\n", name);
 
-    //printf("%d\n", strncmp(fileName, name, strlen(name)));
-    //printf("%s %s %d\n", fileName, name, len);
-
-    int minLen = min(strlen(fileName), strlen(name));
-    if(strncmp(fileName, name, minLen) == 0 && len >= 0){
+    int maxLen = max(strlen(fileName), strlen(name));
+    if(strncmp(fileName, name, maxLen) == 0 && len >= 0){
       fclose(fp);
       return len;
     }
@@ -58,12 +53,12 @@ void formatHeader(char *name, char *dest){
   char type[128];
 
   sscanf(name, "%*[^.].%[^\n]", type);
-  if(!strcmp(type, "ico")) strncpy(type, "x-icon", 6);
-  else if(!strcmp(type, "js")) strncpy(type, "javascript", 10);
+  if(!strcmp(type, "ico")) strncpy(type, "x-icon", 7);
+  else if(!strcmp(type, "js")) strncpy(type, "javascript", 11);
 
   char buf[BUFSIZE] = {'\0'};
-  strncpy(buf, name, BUFSIZE);
-  sprintf(name, "../res/%s", buf);
+  strncpy(buf, name, BUFSIZE - 1);
+  sprintf(name, "res/%s", buf);
 
   sprintf(dest, "HTTP/1.1 200 OK\nContent-Type: text/%s\nContent-length: %d\n\n", type, fileSize);
 }

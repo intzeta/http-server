@@ -1,7 +1,8 @@
-#include <sys/stat.h>
-#include <fcntl.h>
 
 #include "util/util.h"
+
+#include <sys/stat.h>
+#include <fcntl.h>
 #include "dirent.h"
 
 
@@ -65,7 +66,7 @@ static void fname(char *name){
 }
 
 void updateDir(char *name){
-  fp = fopen("util/fileList", "w");
+  fp = fopen("src/util/fileList", "w");
   fname(name);
   fclose(fp);
 }

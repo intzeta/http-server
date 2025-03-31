@@ -79,7 +79,7 @@ void loopServer(int sockfd){
   socklen_t newAddrlen = sizeof(newAddr);
 
   char userAddr[INET6_ADDRSTRLEN];
-  int newSock, status, n;
+  int newSock;
 
   while(1){
     if((newSock = accept(sockfd, (struct sockaddr *)&newAddr, &newAddrlen)) == -1){
@@ -104,7 +104,7 @@ void newClient(int sockfd, char *userAddr){
   char message[BUFSIZE] = {'\0'};
 
   if((status = recv(sockfd, request, BUFSIZE, 0)) > 0)
-    printf("Message sent by %s: \n\a", userAddr);
+    printf("Request sent by %s!\n\a", userAddr);
   else if(status == 0)
     printf("%s has connected!\nClient disconnected!\n", userAddr);
   else
@@ -120,7 +120,6 @@ void newClient(int sockfd, char *userAddr){
 
   FILE *fp = fopen(fileName, "r");
   int n;
-
   while((n = fread(request, 1, 8192, fp)) > 0)
     send(sockfd, request, n, 0);
 
