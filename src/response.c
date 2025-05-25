@@ -1,8 +1,5 @@
 #include "response.h"
 
-
-/* Current bug: corrupted memory!111*/
-
 static int checkFile(char *name){
   FILE *fp;
   if(strlen(name) == 0) return -1;
@@ -42,7 +39,6 @@ void getFileRequest(char *name, char *dest){
 
 void formatHeader(char *name, char *dest){
   int fileSize;
-
 
   if((fileSize = checkFile(name)) == -1){
     fprintf(stderr, "File not found!\n");
