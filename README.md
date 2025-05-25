@@ -3,7 +3,11 @@
 ### Kompilacja i uruchomienie:
 Serwer po kompilacji i uruchomieniu bedzie wysluchiwal na `http://localhost:12347/`
 
-`$ make clean run`
+```
+git clone https://github.com/intzeta/http-server.git
+cd http-server
+make clean run
+```
 
 Dostepne "strony":
 
